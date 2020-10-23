@@ -1,5 +1,16 @@
 <template>
   <div class="home">
+    <v-text-field
+      v-model="newTaskTitle"
+      @click:append="addTask"
+      @keyup.enter="addTask"
+      class="pa-3"
+      outlined
+      label="Append"
+      append-icon="mdi-plus"
+      hide-details
+      clearable
+    ></v-text-field>
      <v-list
      class="pt-0"
       flat
@@ -28,7 +39,7 @@
 
             <v-list-item-action>
               <v-btn
-                @click="deleTask(task.id)"
+                @click="deleteTask(task.id)"
                 icon
               >
                 <v-icon color="grey lighten-1">mdi-delete</v-icon>
@@ -47,31 +58,40 @@ export default {
   name: 'Home',
   data () {
     return {
+      newTaskTitle: '',
       tasks: [
-        {
-          id: 1,
-          title: 'Take a shower',
-          done: false
-        },
-        {
-          id: 2,
-          title: 'Take my pils',
-          done: false
-        },
-        {
-          id: 3,
-          title: 'Have breakfast',
-          done: false
-        }
+        // {
+        //   id: 1,
+        //   title: 'Take a shower',
+        //   done: false
+        // },
+        // {
+        //   id: 2,
+        //   title: 'Take my pils',
+        //   done: false
+        // },
+        // {
+        //   id: 3,
+        //   title: 'Have breakfast',
+        //   done: false
+        // }
       ]
     }
   },
   methods: {
+    addTask () {
+      const newTask = {
+        id: Date.now(),
+        title: this.newTaskTitle,
+        done: false
+      }
+      this.tasks.push(newTask)
+    },
     doneTask (id) {
       const task = this.tasks.filter(task => task.id === id)[0]
       task.done = !task.done
     },
-    deleTask (id) {
+    deleteTask (id) {
       this.tasks = this.tasks.filter(task => task.id !== id)
     }
   }

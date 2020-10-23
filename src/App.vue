@@ -3,15 +3,23 @@
     <v-navigation-drawer
       v-model="drawer"
       app
+      dark
+      class="indigo lighten-1"
     >
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title">
-            Vuetify Todo
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            Remastered
+          <div  class="text-center">
+            <v-avatar size="100">
+              <img src="@/assets/image/avatar-4.jpg" alt="">
+            </v-avatar>
+            <p class="mt-3">Tim</p>
+            <v-list-item-title class="title">
+              Vuetify Todo
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              Remastered
           </v-list-item-subtitle>
+          </div>
         </v-list-item-content>
       </v-list-item>
 
