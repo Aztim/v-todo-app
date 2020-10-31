@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <v-text-field
+  <!--<div class="home"> -->
+    <!-- <v-text-field
       v-model="newTaskTitle"
       @click:append="addTask"
       @keyup.enter="addTask"
@@ -10,46 +10,92 @@
       append-icon="mdi-plus"
       hide-details
       clearable
-    ></v-text-field>
-     <v-list
-     class="pt-0"
-      flat
-    >
-      <div
-        v-for="task in tasks"
-        :key="task.id"
+    ></v-text-field> -->
+  <div>
+      <!-- `<v-list
+        class="pt-0"
+        flat
       >
-        <v-list-item
-          @click="doneTask(task.id)"
-          :class="{'light-blue lighten-5' : task.done}"
+        <div
+          v-for="task in tasks"
+          :key="task.id"
         >
-          <template v-slot:default>
-            <v-list-item-action>
-              <v-checkbox
-                :input-value="task.done"
-                color="primary"
-              ></v-checkbox>
-            </v-list-item-action>
+          <v-list-item
+            @click="doneTask(task.id)"
+            :class="{'light-blue lighten-5' : task.done}"
+          >
+            <template v-slot:default>
+              <v-list-item-action>
+                <v-checkbox
+                  :input-value="task.done"
+                  color="primary"
+                ></v-checkbox>
+              </v-list-item-action>
 
-            <v-list-item-content>
-              <v-list-item-title
-                :class="{'text-decoration-line-through' : task.done}"
-              >{{ task.title }}</v-list-item-title>
-            </v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-title
+                  :class="{'text-decoration-line-through'
+                  :task.done}"
+                > {{ task.title }}
+                </v-list-item-title>
+                <v-list-item-title>`
+                  {{ task.title }}
+                </v-list-item-title>
+              </v-list-item-content>
 
-            <v-list-item-action>
-              <v-btn
-                @click="deleteTask(task.id)"
-                icon
-              >
-                <v-icon color="grey lighten-1">mdi-delete</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </template>
-        </v-list-item>
+              <v-list-item-action>
+                <v-btn
+                  @click="deleteTask(task.id)"
+                  icon
+                >
+                  <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </template>
+          </v-list-item>
+          <v-divider></v-divider>
+        </div>
+      </v-list> -->
+    <v-container class="my-10">
+       <v-card flat class="pa-5" v-for="task in tasks" :key="task.id">
+        <v-layout  wrap :class="`pa-3 task ${task.status}`">
+          <v-flex xs12 md6>
+            <div class="caption grey--text">Task</div>
+            <div>{{task.title}}</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+             <div class="caption grey--text">Description</div>
+             <div>{{task.description}}</div>
+          </v-flex>
+          <v-flex xs6 sm4 md2>
+             <div class="caption grey--text">Due by</div>
+             <div>{{task.due}}</div>
+          </v-flex>
+          <v-flex xs2 sm4 md2>
+            <div>
+              <v-chip
+                id="v-chip"
+                :class="`${task.status} white--text caption my-2`"
+                small
+              >{{task.status}}
+              </v-chip>
+            </div>
+          </v-flex>
+          <!-- <v-flex xs2 sm4 md2>
+            <v-row justify="space-around">
+              <v-chip
+                id="v-chip"
+                :class="`${task.status} white--text caption my-2`"
+                small
+              >{{task.status}}
+              </v-chip>
+              <v-icon @click="remove(task.id)">mdi-delete-forever</v-icon>
+            </v-row>
+          </v-flex> -->
+        </v-layout>
         <v-divider></v-divider>
-      </div>
-    </v-list>
+      </v-card>
+    </v-container>
   </div>
 </template>
 
@@ -60,21 +106,30 @@ export default {
     return {
       newTaskTitle: '',
       tasks: [
-        // {
-        //   id: 1,
-        //   title: 'Take a shower',
-        //   done: false
-        // },
-        // {
-        //   id: 2,
-        //   title: 'Take my pils',
-        //   done: false
-        // },
-        // {
-        //   id: 3,
-        //   title: 'Have breakfast',
-        //   done: false
-        // }
+        {
+          id: 1,
+          title: 'Take a shower',
+          description: 'Тест!!!',
+          // due: -,
+          status: 'complete',
+          done: false
+        },
+        {
+          id: 2,
+          title: 'Take a shower',
+          description: 'Тест!!!',
+          // due: -,
+          status: 'ongoing',
+          done: false
+        },
+        {
+          id: 4,
+          title: 'Take a shower',
+          description: 'Тест!!!',
+          // due: -,
+          status: 'overdue',
+          done: false
+        }
       ]
     }
   },
@@ -97,3 +152,27 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .task.complete{
+    border-left: 4px solid#64B5F6;
+  }
+
+  .task.ongoing{
+    border-left: 4px solid #FFCC80;
+  }
+
+  .task.overdue{
+    border-left: 4px solid #FF0000;
+  }
+
+#v-chip.complete{
+   background-color: #64B5F6;
+}
+#v-chip.ongoing{
+   background-color: #FFD700;
+}
+#v-chip.overdue{
+   background-color: #FF0000;
+}
+</style>

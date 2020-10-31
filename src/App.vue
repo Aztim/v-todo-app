@@ -1,9 +1,9 @@
 <template>
   <v-app id="inspire">
     <Navbar />
-    <v-main>
-      <router-view></router-view>
-    </v-main>
+      <v-main>
+        <router-view></router-view>
+      </v-main>
   </v-app>
 </template>
 
@@ -12,11 +12,11 @@ import Navbar from './components/Navbar'
 export default {
   components: { Navbar },
   data: () => ({
-    // drawer: null,
-    // items: [
-    //   { title: 'Todo', icon: 'mdi-format-list-checks', to: '/' },
-    //   { title: 'About', icon: 'mdi-help-box', to: '/about' }
-    // ]
   })
 }
 </script>
+<style scoped>
+  #inspire {
+    background-color:#F5F5F5;
+  }
+</style>
