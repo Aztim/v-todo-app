@@ -56,8 +56,36 @@
           <v-divider></v-divider>
         </div>
       </v-list> -->
+
     <v-container class="my-10">
-       <v-card flat class="pa-5" v-for="task in tasks" :key="task.id">
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" text color="grey" class="mb-3" @click="sortBy('title')">
+            <v-icon >mdi-folder</v-icon>
+            <span class="text-lowercase">by task</span>
+          </v-btn>
+        </template>
+        <span>Sort projects by task</span>
+      </v-tooltip>
+<!--
+    <v-tooltip top>
+      <template v-slot:activator="{ on }">
+        <v-btn v-on="on" text color="grey" class="mb-3" @click="sortBy('status')">
+          <v-icon >mdi-account</v-icon>
+          <span class="text-lowercase">by status</span>
+        </v-btn>
+      </template>
+      <span>Sort projects by status</span>
+    </v-tooltip> -->
+      <v-col cols="1">
+        <v-select
+          :items="items"
+          label="Status"
+          dense
+          v-model="filter"
+        ></v-select>
+      </v-col>
+       <v-card flat class="pa-5" v-for="task in displayTasks" :key="task.id">
         <v-layout  wrap :class="`pa-3 task ${task.status}`">
           <v-flex xs12 md6>
             <div class="caption grey--text">Task</div>
@@ -116,7 +144,7 @@ export default {
         },
         {
           id: 2,
-          title: 'Take a shower',
+          title: 'Shower',
           description: 'Тест!!!',
           // due: -,
           status: 'ongoing',
@@ -124,13 +152,26 @@ export default {
         },
         {
           id: 4,
-          title: 'Take a shower',
+          title: 'hower',
           description: 'Тест!!!',
           // due: -,
           status: 'overdue',
           done: false
         }
-      ]
+      ],
+      items: ['all', 'complete', 'ongoing', 'overdue'],
+      filter: null
+    }
+  },
+  computed: {
+    displayTasks () {
+      return this.tasks.filter(t => {
+        if (!this.filter || this.filter === 'all') { /* Если ничего нет,то возвращаем true и показывает все задачи */
+          return true
+        }
+        console.log(this.filter)
+        return t.status === this.filter
+      })
     }
   },
   methods: {
@@ -148,6 +189,9 @@ export default {
     },
     deleteTask (id) {
       this.tasks = this.tasks.filter(task => task.id !== id)
+    },
+    sortBy (prop) {
+      this.tasks.sort((a, b) => a[prop] < b[prop] ? -1 : 1)
     }
   }
 }
