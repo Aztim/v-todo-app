@@ -22,7 +22,9 @@
         </div>
       </v-list-item-content>
     </v-list-item>
-
+    <div class="mb-4">
+      <NavbarPopup @projectAdded="snackbar = true" />
+    </div>
     <v-divider></v-divider>
 
     <v-list
@@ -82,7 +84,9 @@
 </template>
 
 <script>
+import NavbarPopup from './NavbarPopup'
 export default {
+  components: { NavbarPopup },
   data: () => ({
     drawer: null,
     items: [

@@ -62,10 +62,10 @@
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" text color="grey" class="mb-3" @click="sortBy('title')">
             <v-icon >mdi-folder</v-icon>
-            <span class="text-lowercase">by task</span>
+            <span class="text-lowercase">by title</span>
           </v-btn>
         </template>
-        <span>Sort projects by task</span>
+        <span>Sort projects by title</span>
       </v-tooltip>
 <!--
     <v-tooltip top>
