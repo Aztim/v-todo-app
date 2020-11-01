@@ -80,6 +80,11 @@
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
     </v-app-bar>
+
+    <v-snackbar v-model="snackbar" :timeout="4000" top color="#31437b">
+      <span>Awesome! You added a new task</span>
+      <v-btn text color="white" @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -88,6 +93,7 @@ import NavbarPopup from './NavbarPopup'
 export default {
   components: { NavbarPopup },
   data: () => ({
+    snackbar: false,
     drawer: null,
     items: [
       { title: 'Todo', icon: 'mdi-format-list-checks', to: '/' },
