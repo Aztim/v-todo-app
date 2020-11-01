@@ -70,6 +70,13 @@ export default {
     },
     clear () {
       this.$refs.form.reset()
+    },
+    checkDate (d) {
+      if (new Date(d) < new Date()) {
+        return 'outdated'
+      } else {
+        return 'ongoing'
+      }
     }
   },
   computed: {
