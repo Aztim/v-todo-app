@@ -1,62 +1,5 @@
 <template>
-  <!--<div class="home"> -->
-    <!-- <v-text-field
-      v-model="newTaskTitle"
-      @click:append="addTask"
-      @keyup.enter="addTask"
-      class="pa-3"
-      outlined
-      label="Append"
-      append-icon="mdi-plus"
-      hide-details
-      clearable
-    ></v-text-field> -->
   <div>
-      <!-- `<v-list
-        class="pt-0"
-        flat
-      >
-        <div
-          v-for="task in tasks"
-          :key="task.id"
-        >
-          <v-list-item
-            @click="doneTask(task.id)"
-            :class="{'light-blue lighten-5' : task.done}"
-          >
-            <template v-slot:default>
-              <v-list-item-action>
-                <v-checkbox
-                  :input-value="task.done"
-                  color="primary"
-                ></v-checkbox>
-              </v-list-item-action>
-
-              <v-list-item-content>
-                <v-list-item-title
-                  :class="{'text-decoration-line-through'
-                  :task.done}"
-                > {{ task.title }}
-                </v-list-item-title>
-                <v-list-item-title>`
-                  {{ task.title }}
-                </v-list-item-title>
-              </v-list-item-content>
-
-              <v-list-item-action>
-                <v-btn
-                  @click="deleteTask(task.id)"
-                  icon
-                >
-                  <v-icon color="grey lighten-1">mdi-delete</v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-          <v-divider></v-divider>
-        </div>
-      </v-list> -->
-
     <v-container class="my-10">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
@@ -76,7 +19,7 @@
           v-model="filter"
         ></v-select>
       </v-col>
-       <v-card flat class="pa-5" v-for="task in displayTasks" :key="task.id">
+       <v-card flat class="pa-5" v-for="task of displayTasks" :key="task.id">
         <v-layout  wrap :class="`pa-3 task ${task.status}`">
           <v-flex xs12 md3>
             <div class="caption grey--text">Task</div>
@@ -124,26 +67,24 @@
 </template>
 
 <script>
-import db from '@/fb'
-import { parseISO, format } from 'date-fns'
-
 export default {
   name: 'Home',
   data () {
     return {
       newTaskTitle: '',
-      tasks: [],
       items: ['all', 'complete', 'ongoing', 'overdue'],
       filter: null
     }
   },
   computed: {
+    tasks () {
+      return this.$store.getters.tasks
+    },
     displayTasks () {
       return this.tasks.filter(t => {
         if (!this.filter || this.filter === 'all') { /* Если ничего нет,то возвращаем true и показывает все задачи */
           return true
         }
-        console.log(this.filter)
         return t.status === this.filter
       })
     }
@@ -161,48 +102,26 @@ export default {
       const task = this.tasks.filter(task => task.id === id)[0]
       task.done = !task.done
     },
-    deleteTask (id) {
-      db.collection('task').doc(id).delete()
-    },
+    // deleteTask (id) {
+    //   db.collection('task').doc(id).delete()
+    // },
     sortBy (prop) {
       this.tasks.sort((a, b) => a[prop] < b[prop] ? -1 : 1)
-    },
-    checkDate (d) {
-      if (new Date(d) < new Date()) {
-        return 'overdue'
-      } else {
-        return 'ongoing'
-      }
-    },
-    formattedDate (due) {
-      return due ? format(parseISO(due), 'do MMM yyyy') : ''
     }
   },
   created () {
-    db.collection('task').get().then((snapshot) => {
-      snapshot.docs.forEach(doc => {
-        const data = {
-          id: doc.id,
-          description: doc.data().description,
-          due: this.formattedDate(doc.data().due),
-          status: this.checkDate(doc.data().due),
-          title: doc.data().title
-        }
-        this.tasks.push(data)
-      })
-    })
-
-    // db.collection('task').onSnapshot(res => {
-    //   const changes = res.docChanges()
-    //   changes.forEach(change => {
-    //     if (change.type === 'added') {
-    //       this.tasks.push({
-    //         ...change.doc.data(),
-    //         id: change.doc.id
-    //       })
-    //     }
-    //   })
-    // })
+    // this.GET_PRODUCTS_FROM_API()
+    this.$store.dispatch('GET_TASK_FROM_FIREBASE')
+  // db.collection('task').onSnapshot(res => {
+  //   const changes = res.docChanges()
+  //   changes.forEach(change => {
+  //     if (change.type === 'added') {
+  //       this.tasks.push({
+  //         ...change.doc.data(),
+  //         id: change.doc.id
+  //       })
+  //     }
+  //   })
   }
 }
 </script>
