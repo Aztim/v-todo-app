@@ -105,6 +105,7 @@
           <v-flex xs2 sm4 md1  class="d-flex justify-end">
             <v-btn
               icon
+              :to="'/task/' + task.id"
             >
               <v-icon color="grey lighten-1">mdi-folder</v-icon>
             </v-btn>

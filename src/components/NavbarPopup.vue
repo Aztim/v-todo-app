@@ -58,8 +58,8 @@ export default {
           title: this.title,
           description: this.description,
           due: this.due,
-          status: 'ongoing',
-          id: Date.now()
+          status: 'ongoing'
+          // id: Date.now()
         }
         db.collection('task').add(project).then(() => {
           this.dialog = false
