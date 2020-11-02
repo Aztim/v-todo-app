@@ -18,7 +18,7 @@
 
             <v-menu max-width="290px">
               <template v-slot:activator="{ on }">
-                <v-text-field :value="formattedDate" label="Due date"  prepend-icon="mdi-calendar-range" v-on="on" :rules="inputRules"  class="mb-4"></v-text-field>
+                <v-text-field :value="formattedDate()" label="Due date"  prepend-icon="mdi-calendar-range" v-on="on" :rules="inputRules"  class="mb-4"></v-text-field>
               </template>
                 <v-date-picker v-model="due"></v-date-picker>
             </v-menu>
@@ -57,8 +57,8 @@ export default {
         const project = {
           title: this.title,
           description: this.description,
-          due: format(parseISO(this.due), 'do MMM yyyy'),
-          status: this.checkDate(this.due),
+          due: this.due,
+          status: 'ongoing',
           id: Date.now()
         }
         db.collection('task').add(project).then(() => {
@@ -71,15 +71,6 @@ export default {
     clear () {
       this.$refs.form.reset()
     },
-    checkDate (d) {
-      if (new Date(d) < new Date()) {
-        return 'outdated'
-      } else {
-        return 'ongoing'
-      }
-    }
-  },
-  computed: {
     formattedDate () {
       return this.due ? format(parseISO(this.due), 'do MMM yyyy') : ''
     }

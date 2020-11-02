@@ -67,16 +67,7 @@
         </template>
         <span>Sort projects by title</span>
       </v-tooltip>
-<!--
-    <v-tooltip top>
-      <template v-slot:activator="{ on }">
-        <v-btn v-on="on" text color="grey" class="mb-3" @click="sortBy('status')">
-          <v-icon >mdi-account</v-icon>
-          <span class="text-lowercase">by status</span>
-        </v-btn>
-      </template>
-      <span>Sort projects by status</span>
-    </v-tooltip> -->
+
       <v-col cols="1">
         <v-select
           :items="items"
@@ -87,39 +78,43 @@
       </v-col>
        <v-card flat class="pa-5" v-for="task in displayTasks" :key="task.id">
         <v-layout  wrap :class="`pa-3 task ${task.status}`">
-          <v-flex xs12 md6>
+          <v-flex xs12 md3>
             <div class="caption grey--text">Task</div>
             <div>{{task.title}}</div>
           </v-flex>
-          <v-flex xs6 sm4 md2>
+
+          <v-flex xs6 sm4 md4>
              <div class="caption grey--text">Description</div>
              <div>{{task.description}}</div>
           </v-flex>
+
           <v-flex xs6 sm4 md2>
              <div class="caption grey--text">Due by</div>
              <div>{{task.due}}</div>
           </v-flex>
+
           <v-flex xs2 sm4 md2>
-            <div>
-              <v-chip
-                id="v-chip"
-                :class="`${task.status} white--text caption my-2`"
-                small
-              >{{task.status}}
-              </v-chip>
-            </div>
+            <v-chip
+              id="v-chip"
+              :class="`${task.status} white--text caption my-2`"
+              small
+            >{{task.status}}
+            </v-chip>
           </v-flex>
-          <!-- <v-flex xs2 sm4 md2>
-            <v-row justify="space-around">
-              <v-chip
-                id="v-chip"
-                :class="`${task.status} white--text caption my-2`"
-                small
-              >{{task.status}}
-              </v-chip>
-              <v-icon @click="remove(task.id)">mdi-delete-forever</v-icon>
-            </v-row>
-          </v-flex> -->
+
+          <v-flex xs2 sm4 md1  class="d-flex justify-end">
+            <v-btn
+              icon
+            >
+              <v-icon color="grey lighten-1">mdi-folder</v-icon>
+            </v-btn>
+            <v-btn
+              @click="deleteTask(task.id)"
+              icon
+            >
+              <v-icon color="grey lighten-1">mdi-delete</v-icon>
+            </v-btn>
+          </v-flex>
         </v-layout>
         <v-divider></v-divider>
       </v-card>
@@ -128,37 +123,15 @@
 </template>
 
 <script>
+import db from '@/fb'
+import { parseISO, format } from 'date-fns'
+
 export default {
   name: 'Home',
   data () {
     return {
       newTaskTitle: '',
-      tasks: [
-        {
-          id: 1,
-          title: 'Take a shower',
-          description: 'Тест!!!',
-          // due: -,
-          status: 'complete',
-          done: false
-        },
-        {
-          id: 2,
-          title: 'Shower',
-          description: 'Тест!!!',
-          // due: -,
-          status: 'ongoing',
-          done: false
-        },
-        {
-          id: 4,
-          title: 'hower',
-          description: 'Тест!!!',
-          // due: -,
-          status: 'overdue',
-          done: false
-        }
-      ],
+      tasks: [],
       items: ['all', 'complete', 'ongoing', 'overdue'],
       filter: null
     }
@@ -188,11 +161,47 @@ export default {
       task.done = !task.done
     },
     deleteTask (id) {
-      this.tasks = this.tasks.filter(task => task.id !== id)
+      db.collection('task').doc(id).delete()
     },
     sortBy (prop) {
       this.tasks.sort((a, b) => a[prop] < b[prop] ? -1 : 1)
+    },
+    checkDate (d) {
+      if (new Date(d) < new Date()) {
+        return 'overdue'
+      } else {
+        return 'ongoing'
+      }
+    },
+    formattedDate (due) {
+      return due ? format(parseISO(due), 'do MMM yyyy') : ''
     }
+  },
+  created () {
+    db.collection('task').get().then((snapshot) => {
+      snapshot.docs.forEach(doc => {
+        const data = {
+          id: doc.id,
+          description: doc.data().description,
+          due: this.formattedDate(doc.data().due),
+          status: this.checkDate(doc.data().due),
+          title: doc.data().title
+        }
+        this.tasks.push(data)
+      })
+    })
+
+    // db.collection('task').onSnapshot(res => {
+    //   const changes = res.docChanges()
+    //   changes.forEach(change => {
+    //     if (change.type === 'added') {
+    //       this.tasks.push({
+    //         ...change.doc.data(),
+    //         id: change.doc.id
+    //       })
+    //     }
+    //   })
+    // })
   }
 }
 </script>
