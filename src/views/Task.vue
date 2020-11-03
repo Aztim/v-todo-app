@@ -1,24 +1,63 @@
 <template>
-  <div class="project">
-    <h1 class="grey--text">Task</h1>
+  <div>
+  <v-row justify="center" class="my-16">
+    <v-col
+      cols="12"
+      sm="10"
+      md="8"
+      lg="6"
+    >
+      <v-card v-if="task">
+        <v-card-text>
+          <v-text-field
+            v-model="name"
+            :rules="[() => !!name || 'This field is required']"
+            label="Title"
+            placeholder="John Doe"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="description"
+            :rules="[
+              () => !!description || 'This field is required',
+              () => !!description && description.length <= 25 || 'Address must be less than 25 characters',
+            ]"
+            label="Description"
+            placeholder="Snowy Rock Pl"
+            counter="25"
+            required
+          ></v-text-field>
+          <!-- <v-menu max-width="290px">
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                :value="formattedDate()"
+                label="Due date"
+                prepend-icon="mdi-calendar-range"
+                v-on="on"
+                :rules="inputRules"
+                class="mb-4">
+              </v-text-field>
+            </template>
+            <v-date-picker v-model="due"></v-date-picker>
+          </v-menu> -->
+        </v-card-text>
 
-    <v-container class="my-5">
-      <v-expansion-panels v-for="task in tasks" :key="task.id">
-        <v-expansion-panel>
-          <v-expansion-panel-header>
-            <div>{{ task.title }}</div>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-card>
-              <v-card-text class="px-4 grey--text">
-                <div class="font-weight-bold"> due by {{ task.due }}</div>
-                <div>{{ task.description }}</div>
-              </v-card-text>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </v-container>
+        <v-card-actions>
+          <v-btn text>
+            COMPLETE
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="#31437b"
+            text
+            @click="submit"
+          >
+            UPDATE
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
   </div>
 </template>
 
@@ -26,17 +65,13 @@
 export default {
   data () {
     return {
-      tasks: []
+      task: []
     }
   },
-  // computed: {
-  //   myProjects () {
-  //     return this.tasks.filter(task => {
-  //       return project.person === 'Tim'
-  //     })
-  //   }
-  // },
+  computed: {
+  },
   created () {
+    this.task = this.$store.getters.tasks.filter(item => item.id === this.$route.params.id)
   }
 }
 </script>

@@ -13,18 +13,50 @@
         </v-card-title>
         <v-card-text>
           <v-form class="px-3" ref="form">
-            <v-text-field label="Title" v-model="title" prepend-icon="mdi-folder" :rules="inputRules"></v-text-field>
-            <v-textarea label="Information" v-model="description" prepend-icon="mdi-pencil" :rules="inputRules"></v-textarea>
+            <v-text-field
+              label="Title"
+              v-model="title"
+              prepend-icon="mdi-folder"
+              :rules="inputRules">
+            </v-text-field>
+
+            <v-textarea
+              label="Description"
+              v-model="description"
+              prepend-icon="mdi-pencil"
+              :rules="inputRules">
+            </v-textarea>
 
             <v-menu max-width="290px">
               <template v-slot:activator="{ on }">
-                <v-text-field :value="formattedDate()" label="Due date"  prepend-icon="mdi-calendar-range" v-on="on" :rules="inputRules"  class="mb-4"></v-text-field>
+                <v-text-field
+                  :value="formattedDate()"
+                  label="Due date"
+                  prepend-icon="mdi-calendar-range"
+                  v-on="on"
+                  :rules="inputRules"
+                  class="mb-4">
+                </v-text-field>
               </template>
                 <v-date-picker v-model="due"></v-date-picker>
             </v-menu>
 
-            <v-btn  class="mr-4" color="blue lighten-2" dark @click="submit" :loading="loading">Add task</v-btn>
-            <v-btn color="deep-orange darken-1" @click="clear" dark="">clear</v-btn>
+            <v-btn
+              class="mr-4"
+              color="blue lighten-2"
+              dark @click="submit"
+              :loading="loading"
+            >
+              Add task
+            </v-btn>
+
+            <v-btn
+              color="deep-orange darken-1"
+              @click="clear"
+              dark=""
+            >
+              clear
+            </v-btn>
           </v-form>
         </v-card-text>
       </v-card>

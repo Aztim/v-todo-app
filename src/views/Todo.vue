@@ -19,7 +19,7 @@
           v-model="filter"
         ></v-select>
       </v-col>
-       <v-card flat class="pa-5" v-for="task of displayTasks" :key="task.id">
+       <v-card flat class="pa-5" v-for="task in displayTasks" :key="task.id">
         <v-layout  wrap :class="`pa-3 task ${task.status}`">
           <v-flex xs12 md3>
             <div class="caption grey--text">Task</div>
@@ -48,7 +48,7 @@
           <v-flex xs2 sm4 md1  class="d-flex justify-end">
             <v-btn
               icon
-              :to="'/task/' + task.id"
+              :to="{ name : 'Task', params: {id: task.id}}"
             >
               <v-icon color="grey lighten-1">mdi-folder</v-icon>
             </v-btn>
@@ -102,15 +102,14 @@ export default {
       const task = this.tasks.filter(task => task.id === id)[0]
       task.done = !task.done
     },
-    // deleteTask (id) {
-    //   db.collection('task').doc(id).delete()
-    // },
+    deleteTask (id) {
+      this.$store.dispatch('DELETE_FROM_CART', id)
+    },
     sortBy (prop) {
       this.tasks.sort((a, b) => a[prop] < b[prop] ? -1 : 1)
     }
   },
   created () {
-    // this.GET_PRODUCTS_FROM_API()
     this.$store.dispatch('GET_TASK_FROM_FIREBASE')
   // db.collection('task').onSnapshot(res => {
   //   const changes = res.docChanges()
