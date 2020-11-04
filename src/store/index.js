@@ -13,7 +13,7 @@ export default new Vuex.Store({
     SET_DATA_TO_STATE: (state, task) => {
       state.tasks = task
     },
-    DELETE_ITEM_FROM_CART: (state, id) => {
+    DELETE_ITEM_FROM_FIREBASE: (state, id) => {
       db.collection('task').doc(id).delete()
     }
   },
@@ -34,9 +34,12 @@ export default new Vuex.Store({
         commit('SET_DATA_TO_STATE', task)
       })
     },
-    DELETE_FROM_CART ({ commit }, id) {
-      commit('DELETE_ITEM_FROM_CART', id)
+    DELETE_FROM_FIREBASE ({ commit }, id) {
+      commit('DELETE_ITEM_FROM_FIREBASE', id)
     }
+    // UPDATE_TASK({ commit }, task) {
+    //   commit('UPDATE_TASK',)
+    // }
   },
   getters: {
     tasks: (state) => state.tasks

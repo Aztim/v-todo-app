@@ -7,54 +7,52 @@
       md="8"
       lg="6"
     >
-      <v-card v-if="task">
+      <v-card>
         <v-card-text>
-          <v-text-field
-            v-model="name"
-            :rules="[() => !!name || 'This field is required']"
-            label="Title"
-            placeholder="John Doe"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="description"
-            :rules="[
-              () => !!description || 'This field is required',
-              () => !!description && description.length <= 25 || 'Address must be less than 25 characters',
-            ]"
-            label="Description"
-            placeholder="Snowy Rock Pl"
-            counter="25"
-            required
-          ></v-text-field>
-          <!-- <v-menu max-width="290px">
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                :value="formattedDate()"
-                label="Due date"
-                prepend-icon="mdi-calendar-range"
-                v-on="on"
-                :rules="inputRules"
-                class="mb-4">
-              </v-text-field>
-            </template>
-            <v-date-picker v-model="due"></v-date-picker>
-          </v-menu> -->
-        </v-card-text>
+          <v-form class="px-3" ref="form">
+            <v-text-field
+              label="Title"
+              v-model="task.title"
+              prepend-icon="mdi-folder"
+              :rules="inputRules">
+            </v-text-field>
 
-        <v-card-actions>
-          <v-btn text>
+            <v-textarea
+              label="Description"
+              v-model="task.description"
+              prepend-icon="mdi-pencil"
+              :rules="inputRules">
+            </v-textarea>
+
+            <v-menu max-width="290px">
+                <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="task.due"
+                  prepend-icon="mdi-calendar-range"
+                  v-on="on"
+                  :rules="inputRules"
+                  class="mb-4">
+                </v-text-field>
+              </template>
+                <v-date-picker
+                v-model="due" @change="changeDue"></v-date-picker>
+            </v-menu>
+                <!-- :value="formattedDate()" -->
+            <v-card-actions>
+          <v-btn text @click="completeTask">
             COMPLETE
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
             color="#31437b"
             text
-            @click="submit"
+            @click="updateTask"
           >
             UPDATE
           </v-btn>
         </v-card-actions>
+          </v-form>
+        </v-card-text>
       </v-card>
     </v-col>
   </v-row>
@@ -62,16 +60,36 @@
 </template>
 
 <script>
+import { parseISO, format } from 'date-fns'
 export default {
   data () {
     return {
-      task: []
+      task: [],
+      title: '',
+      description: '',
+      due: null
     }
   },
   computed: {
   },
+  methods: {
+    formattedDate (d) {
+      return d ? format(parseISO(d), 'do MMM yyyy') : ''
+    },
+    changeDue () {
+      this.task.due = this.formattedDate(this.due)
+    },
+    updateTask () {
+      this.$store.dispatch('UPDATE_TASK', this.task.id)
+    }
+    // completeTask () {
+    //   this.task.status = 'complete'
+    //   this.$store.dispatch('COMPLETE_TASK', this.task.id)
+    //   this.$router.push('/')
+    // }
+  },
   created () {
-    this.task = this.$store.getters.tasks.filter(item => item.id === this.$route.params.id)
+    this.task = this.$store.getters.tasks.filter(item => item.id === this.$route.params.id)[0]
   }
 }
 </script>

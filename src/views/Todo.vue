@@ -103,7 +103,7 @@ export default {
       task.done = !task.done
     },
     deleteTask (id) {
-      this.$store.dispatch('DELETE_FROM_CART', id)
+      this.$store.dispatch('DELETE_FROM_FIREBASE', id)
     },
     sortBy (prop) {
       this.tasks.sort((a, b) => a[prop] < b[prop] ? -1 : 1)
@@ -111,16 +111,6 @@ export default {
   },
   created () {
     this.$store.dispatch('GET_TASK_FROM_FIREBASE')
-  // db.collection('task').onSnapshot(res => {
-  //   const changes = res.docChanges()
-  //   changes.forEach(change => {
-  //     if (change.type === 'added') {
-  //       this.tasks.push({
-  //         ...change.doc.data(),
-  //         id: change.doc.id
-  //       })
-  //     }
-  //   })
   }
 }
 </script>
