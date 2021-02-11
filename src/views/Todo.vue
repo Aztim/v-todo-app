@@ -1,140 +1,109 @@
 <template>
   <div>
     <v-container class="my-10">
-      <v-tooltip top>
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" text color="grey" class="mb-3" @click="sortBy('title')">
-            <v-icon >mdi-folder</v-icon>
-            <span class="text-lowercase">by title</span>
-          </v-btn>
-        </template>
-        <span>Sort projects by title</span>
-      </v-tooltip>
+      <v-list
+        v-if="tasks.length"
+        class="pt-0"
+        flat
+      >
+        <div
+          v-for="task in tasks"
+          :key="task.id"
+        >
+          <v-list-item
+            @click="doneTask(task.id)"
+            :class="{ 'blue lighten-5' : task.done }"
+          >
+            <template v-slot:default>
+              <v-list-item-action>
+                <v-checkbox
+                  :input-value="task.done"
+                  color="primary"
+                ></v-checkbox>
+              </v-list-item-action>
 
-      <v-col cols="1">
-        <v-select
-          :items="items"
-          label="Status"
-          dense
-          v-model="filter"
-        ></v-select>
-      </v-col>
-       <v-card flat class="pa-5" v-for="task in displayTasks" :key="task.id">
-        <v-layout  wrap :class="`pa-3 task ${task.status}`">
-          <v-flex xs12 md3>
-            <div class="caption grey--text">Task</div>
-            <div>{{task.title}}</div>
-          </v-flex>
+              <v-list-item-content>
+                <v-list-item-title
+                  :class="{ 'text-decoration-line-through' : task.done }"
+                >
+                  {{ task.title }}
+                </v-list-item-title>
+              </v-list-item-content>
 
-          <v-flex xs6 sm4 md4>
-             <div class="caption grey--text">Description</div>
-             <div>{{task.description}}</div>
-          </v-flex>
+              <v-list-item-action>
+                <v-btn
+                  @click.stop="deleteTask(task.id)"
+                  icon
+                >
+                  <v-icon color="primary lighten-1">mdi-delete</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </template>
 
-          <v-flex xs6 sm4 md2>
-             <div class="caption grey--text">Due by</div>
-             <div>{{task.due}}</div>
-          </v-flex>
-
-          <v-flex xs2 sm4 md2>
-            <v-chip
-              id="v-chip"
-              :class="`${task.status} white--text caption my-2`"
-              small
-            >{{task.status}}
-            </v-chip>
-          </v-flex>
-
-          <v-flex xs2 sm4 md1  class="d-flex justify-end">
-            <v-btn
-              icon
-              :to="{ name : 'Task', params: {id: task.id}}"
-            >
-              <v-icon color="grey lighten-1">mdi-folder</v-icon>
-            </v-btn>
-            <v-btn
-              @click="deleteTask(task.id)"
-              icon
-            >
-              <v-icon color="grey lighten-1">mdi-delete</v-icon>
-            </v-btn>
-          </v-flex>
-        </v-layout>
-        <v-divider></v-divider>
-      </v-card>
+          </v-list-item>
+          <v-divider></v-divider>
+        </div>
+      </v-list>
+      <div
+        v-else
+        class="no-tasks"
+      >
+        <v-icon
+          size="100"
+          color="primary"
+        >
+          mdi-check
+        </v-icon>
+        <div class="text-h5 primary--text">No tasks</div>
+      </div>
     </v-container>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Todo',
   data () {
     return {
-      newTaskTitle: '',
-      items: ['all', 'complete', 'ongoing', 'overdue'],
-      filter: null
-    }
-  },
-  computed: {
-    tasks () {
-      return this.$store.getters.tasks
-    },
-    displayTasks () {
-      return this.tasks.filter(t => {
-        if (!this.filter || this.filter === 'all') { /* Если ничего нет,то возвращаем true и показывает все задачи */
-          return true
+      tasks: [
+        {
+          id: 1,
+          title: 'Wake up',
+          done: false
+        },
+        {
+          id: 2,
+          title: 'Get bananas',
+          done: false
+        },
+        {
+          id: 3,
+          title: 'Eat bananas',
+          done: false
         }
-        return t.status === this.filter
-      })
+      ]
+      // newTaskTitle: '',
+      // items: ['all', 'complete', 'ongoing', 'overdue'],
+      // filter: null
     }
   },
   methods: {
-    addTask () {
-      const newTask = {
-        id: Date.now(),
-        title: this.newTaskTitle,
-        done: false
-      }
-      this.tasks.push(newTask)
-    },
     doneTask (id) {
       const task = this.tasks.filter(task => task.id === id)[0]
       task.done = !task.done
     },
     deleteTask (id) {
-      this.$store.dispatch('DELETE_FROM_FIREBASE', id)
-    },
-    sortBy (prop) {
-      this.tasks.sort((a, b) => a[prop] < b[prop] ? -1 : 1)
+      this.tasks = this.tasks.filter(task => task.id !== id)
     }
-  },
-  created () {
-    this.$store.dispatch('GET_TASK_FROM_FIREBASE')
   }
 }
 </script>
 
-<style scoped>
-  .task.complete{
-    border-left: 4px solid#64B5F6;
-  }
-
-  .task.ongoing{
-    border-left: 4px solid #FFCC80;
-  }
-
-  .task.overdue{
-    border-left: 4px solid #FF0000;
-  }
-
-#v-chip.complete{
-   background-color: #64B5F6;
-}
-#v-chip.ongoing{
-   background-color: #FFD700;
-}
-#v-chip.overdue{
-   background-color: #FF0000;
-}
+<style lang="sass">
+ .no-tasks
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    opacity: 0.5
 </style>

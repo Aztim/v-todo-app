@@ -66,7 +66,6 @@
 
 <script>
 import { parseISO, format } from 'date-fns'
-import db from '@/fb'
 
 export default {
   data () {
@@ -93,11 +92,8 @@ export default {
           status: 'ongoing'
           // id: Date.now()
         }
-        db.collection('task').add(project).then(() => {
-          this.dialog = false
-          this.$emit('projectAdded')
-          this.loading = false
-        })
+        return project
+        // Удалить
       }
     },
     clear () {
