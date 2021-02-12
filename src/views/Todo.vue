@@ -31,23 +31,26 @@
               </v-list-item-content>
 
               <v-list-item-action>
-                <v-btn
+                <!-- <v-btn
                   @click.stop="dialogs.delete = true"
                   icon
                 >
                   <v-icon color="primary lighten-1">mdi-delete</v-icon>
-                </v-btn>
+                </v-btn> -->
+                <TaskMenu
+                  :task="task"
+                />
               </v-list-item-action>
             </template>
 
           </v-list-item>
           <v-divider></v-divider>
 
-          <DialogDelete
+          <!-- <DialogDelete
             v-if="dialogs.delete"
             @close="dialogs.delete = false"
             @delete="deleteTask(task.id)"
-          />
+          /> -->
         </div>
       </v-list>
       <div
@@ -67,16 +70,14 @@
 </template>
 
 <script>
-import DialogDelete from '@/components/Dialog/DialogDelete'
+import TaskMenu from '@/components/TaskMenu'
+
 import { mapGetters } from 'vuex'
 export default {
   name: 'Todo',
-  components: { DialogDelete },
+  components: { TaskMenu },
   data () {
     return {
-      dialogs: {
-        delete: false
-      }
       // newTaskTitle: '',
       // items: ['all', 'complete', 'ongoing', 'overdue'],
       // filter: null
@@ -91,10 +92,6 @@ export default {
     doneTask (id) {
       const task = this.tasks.filter(task => task.id === id)[0]
       task.done = !task.done
-    },
-    deleteTask (id) {
-      this.$store.dispatch('deleteTask', id)
-      this.dialogs.delete = false
     }
   }
 }
