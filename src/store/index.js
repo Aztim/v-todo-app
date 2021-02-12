@@ -1,48 +1,80 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import db from '@/fb'
-import { parseISO, format } from 'date-fns'
+// import db from '@/fb'
+// import { parseISO, format } from 'date-fns'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    tasks: []
+    search: null,
+    tasks: [
+      {
+        id: 1,
+        title: 'Wake up',
+        done: false
+      },
+      {
+        id: 2,
+        title: 'Get bananas',
+        done: false
+      },
+      {
+        id: 3,
+        title: 'Eat bananas',
+        done: false
+      }
+    ],
+    snackbar: {
+      show: false,
+      text: ''
+    }
   },
   mutations: {
-    SET_DATA_TO_STATE: (state, task) => {
-      state.tasks = task
+    addTask (state, newTaskTitle) {
+      state.tasks.push(newTaskTitle)
     },
-    DELETE_ITEM_FROM_FIREBASE: (state, id) => {
-      db.collection('task').doc(id).delete()
+
+    showSnackbar (state, text) {
+      let timeout = 0
+      if (state.snackbar.show) {
+        state.snackbar.show = false
+        timeout = 300
+      }
+      setTimeout(() => {
+        state.snackbar.show = true
+        state.snackbar.text = text
+      }, timeout)
+    },
+
+    deleteTask (state, id) {
+      state.tasks = state.tasks.filter(task => task.id !== id)
+    },
+
+    hideSnackbar (state) {
+      state.snackbar.show = false
     }
   },
+
   actions: {
-    GET_TASK_FROM_FIREBASE ({ commit }) {
-      db.collection('task').get().then((querysnapshot) => {
-        const task = []
-        querysnapshot.docs.forEach(doc => {
-          const data = {
-            id: doc.id,
-            description: doc.data().description,
-            due: doc.data().due ? format(parseISO(doc.data().due), 'do MMM yyyy') : '',
-            status: new Date(doc.data().due) < new Date() ? 'overdue' : doc.data().status,
-            title: doc.data().title
-          }
-          task.push(data)
-        })
-        commit('SET_DATA_TO_STATE', task)
-      })
+    addTask ({ commit }, newTaskTitle) {
+      commit('addTask', newTaskTitle)
+      commit('showSnackbar', 'Task added!')
     },
-    DELETE_FROM_FIREBASE ({ commit }, id) {
-      commit('DELETE_ITEM_FROM_FIREBASE', id)
+
+    hideSnackbar ({ commit }) {
+      commit('hideSnackbar')
+    },
+
+    deleteTask ({ commit }, id) {
+      commit('deleteTask', id)
+      commit('showSnackbar', 'Task deleted!')
     }
-    // UPDATE_TASK({ commit }, task) {
-    //   commit('UPDATE_TASK',)
-    // }
   },
+
   getters: {
-    tasks: (state) => state.tasks
+    tasksAll: state => state.tasks,
+    snackbar: state => state.snackbar
     // taskById: s => id => s.tasks.find(t => t.id === id)
   }
 })

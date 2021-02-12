@@ -61,31 +61,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Todo',
   data () {
     return {
-      tasks: [
-        {
-          id: 1,
-          title: 'Wake up',
-          done: false
-        },
-        {
-          id: 2,
-          title: 'Get bananas',
-          done: false
-        },
-        {
-          id: 3,
-          title: 'Eat bananas',
-          done: false
-        }
-      ]
       // newTaskTitle: '',
       // items: ['all', 'complete', 'ongoing', 'overdue'],
       // filter: null
     }
+  },
+  computed: {
+    ...mapGetters({
+      tasks: 'tasksAll'
+    })
   },
   methods: {
     doneTask (id) {
@@ -93,7 +82,7 @@ export default {
       task.done = !task.done
     },
     deleteTask (id) {
-      this.tasks = this.tasks.filter(task => task.id !== id)
+      this.$store.dispatch('deleteTask', id)
     }
   }
 }

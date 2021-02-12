@@ -3,14 +3,17 @@
     <Navbar />
       <v-main>
         <router-view></router-view>
+        <Snackbar />
       </v-main>
   </v-app>
 </template>
 
 <script>
 import Navbar from './components/Navbar'
+import Snackbar from './components/Shared/Snackbar'
+
 export default {
-  components: { Navbar },
+  components: { Navbar, Snackbar },
   data: () => ({
   })
 }

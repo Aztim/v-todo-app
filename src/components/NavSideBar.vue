@@ -21,8 +21,9 @@
         </div>
       </v-list-item-content>
     </v-list-item>
+
     <div class="mb-4">
-      <NavbarPopup @projectAdded="snackbar = true" />
+      <NavbarPopup  />
     </div>
     <v-divider></v-divider>
 
@@ -55,6 +56,10 @@ export default {
   props: {
     isDrawer: {
       type: Boolean,
+      required: true
+    },
+    items: {
+      type: Array,
       required: true
     }
   },

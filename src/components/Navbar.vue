@@ -2,6 +2,7 @@
 <div>
   <NavSideBar
     :is-drawer = drawer
+    :items = items
   />
   <v-app-bar
     app
@@ -35,11 +36,6 @@
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
     </v-app-bar>
-
-    <v-snackbar v-model="snackbar" :timeout="4000" top color="#31437b">
-      <span>Awesome! You added a new task</span>
-      <v-btn text color="white" @click="snackbar = false">Close</v-btn>
-    </v-snackbar>
   </div>
 </template>
 
@@ -48,7 +44,6 @@ import NavSideBar from './NavSideBar'
 export default {
   components: { NavSideBar },
   data: () => ({
-    snackbar: false,
     drawer: false,
     items: [
       { title: 'Todo', icon: 'mdi-format-list-checks', to: '/' },

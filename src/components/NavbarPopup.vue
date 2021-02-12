@@ -3,7 +3,7 @@
     <v-dialog width="500" v-model="dialog">
       <template v-slot:activator="{ on }">
         <v-btn color="blue lighten-2" dark v-on="on" >
-          Click Me
+          New Task
         </v-btn>
       </template>
 
@@ -44,7 +44,7 @@
             <v-btn
               class="mr-4"
               color="blue lighten-2"
-              dark @click="submit"
+              dark @click="addTask"
               :loading="loading"
             >
               Add task
@@ -81,19 +81,20 @@ export default {
     }
   },
   methods: {
-    submit () {
+    addTask () {
       if (this.$refs.form.validate()) {
-        this.loading = true
+        // this.loading = true
 
-        const project = {
+        const newTaskTitle = {
           title: this.title,
           description: this.description,
-          due: this.due,
-          status: 'ongoing'
-          // id: Date.now()
+          dueDate: this.due,
+          status: 'ongoing',
+          id: Date.now(),
+          done: false
         }
-        return project
-        // Удалить
+        this.$store.dispatch('addTask', newTaskTitle)
+        this.dialog = false
       }
     },
     clear () {
