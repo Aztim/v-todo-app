@@ -12,17 +12,20 @@ export default new Vuex.Store({
       {
         id: 1,
         title: 'Wake up',
-        done: false
+        done: false,
+        dueDate: '2021-03-08'
       },
       {
         id: 2,
         title: 'Get bananas',
-        done: false
+        done: false,
+        dueDate: '2021-03-10'
       },
       {
         id: 3,
         title: 'Eat bananas',
-        done: false
+        done: false,
+        dueDate: '2021-03-21'
       }
     ],
     snackbar: {
@@ -57,6 +60,10 @@ export default new Vuex.Store({
     updateTaskTitle (state, payload) {
       const task = state.tasks.filter(task => task.id === payload.id)[0]
       task.title = payload.title
+    },
+    updateTaskDueDate (state, payload) {
+      const task = state.tasks.filter(task => task.id === payload.id)[0]
+      task.dueDate = payload.dueDate
     }
   },
 
@@ -77,6 +84,10 @@ export default new Vuex.Store({
     updateTaskTitle ({ commit }, payload) {
       commit('updateTaskTitle', payload)
       commit('showSnackbar', 'Task updated!')
+    },
+    updateTaskDueDate ({ commit }, payload) {
+      commit('updateTaskDueDate', payload)
+      commit('showSnackbar', 'Due Date Updated!')
     }
   },
 

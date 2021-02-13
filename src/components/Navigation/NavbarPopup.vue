@@ -28,6 +28,7 @@
             </v-textarea>
 
             <v-menu max-width="290px">
+              <v-date-picker v-model="due"></v-date-picker>
               <template v-slot:activator="{ on }">
                 <v-text-field
                   :value="formattedDate()"
@@ -38,7 +39,6 @@
                   class="mb-4">
                 </v-text-field>
               </template>
-                <v-date-picker v-model="due"></v-date-picker>
             </v-menu>
 
             <v-btn
@@ -95,6 +95,7 @@ export default {
         }
         this.$store.dispatch('addTask', newTaskTitle)
         this.dialog = false
+        // this.due = null
       }
     },
     clear () {
