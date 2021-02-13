@@ -29,35 +29,37 @@
       </v-list>
     </v-menu>
 
-    <!-- <dialog-delete
-      v-if="dialogs.delete"
-      @close="dialogs.delete = false"
+   <DialogEdit
+      v-if="dialogs.edit"
+      @close="dialogs.edit = false"
       :task="task"
-    /> -->
+    />
     <DialogDelete
       v-if="dialogs.delete"
       @close="dialogs.delete = false"
-      @delete="deleteTask(task.id)"
+      :task="task"
     />
   </div>
 </template>
 
 <script>
 import DialogDelete from './Dialog/DialogDelete'
+import DialogEdit from './Dialog/DialogEdit'
 
 export default {
-  components: { DialogDelete },
+  components: { DialogDelete, DialogEdit },
   props: ['task'],
   data: () => ({
     dialogs: {
-      delete: false
+      delete: false,
+      edit: false
     },
     items: [
       {
         title: 'Edit',
         icon: 'mdi-pencil',
         click () {
-          console.log('edit')
+          this.dialogs.edit = true
         }
       },
       {
@@ -79,10 +81,6 @@ export default {
   methods: {
     handleClick (index) {
       this.items[index].click.call(this)
-    },
-    deleteTask (id) {
-      this.$store.dispatch('deleteTask', id)
-      this.dialogs.delete = false
     }
   }
 }

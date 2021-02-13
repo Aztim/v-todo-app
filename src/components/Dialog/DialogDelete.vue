@@ -18,7 +18,7 @@
           No
         </v-btn>
         <v-btn
-          @click="$emit('delete')"
+          @click="deleteTask"
           color="red darken-1"
           text
         >
@@ -30,7 +30,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+  props: ['task'],
+  methods: {
+    deleteTask () {
+      this.$store.dispatch('deleteTask', this.task.id)
+    }
+  }
+}
 </script>
 
 <style>
