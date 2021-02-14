@@ -19,13 +19,13 @@
               prepend-icon="mdi-folder"
               :rules="inputRules">
             </v-text-field>
-
+<!--
             <v-textarea
               label="Description"
               v-model="description"
               prepend-icon="mdi-pencil"
               :rules="inputRules">
-            </v-textarea>
+            </v-textarea> -->
 
             <v-menu max-width="290px">
               <v-date-picker v-model="due"></v-date-picker>
@@ -71,7 +71,6 @@ export default {
   data () {
     return {
       title: '',
-      description: '',
       due: null,
       inputRules: [
         v => v.length >= 3 || 'Minimum length is 3 characters'
@@ -87,7 +86,6 @@ export default {
 
         const newTaskTitle = {
           title: this.title,
-          description: this.description,
           dueDate: this.due,
           status: 'ongoing',
           id: Date.now(),
@@ -95,7 +93,6 @@ export default {
         }
         this.$store.dispatch('addTask', newTaskTitle)
         this.dialog = false
-        // this.due = null
       }
     },
     clear () {

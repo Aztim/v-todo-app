@@ -33,7 +33,7 @@
               <v-list-item-action >
                 <v-list-item-action-text>
                   <v-icon small>mdi-calendar</v-icon>
-                  {{ task.dueDate  }}
+                  {{ task.dueDate | formattedDate }}
                 </v-list-item-action-text>
               </v-list-item-action>
 
@@ -66,8 +66,9 @@
 
 <script>
 import TaskMenu from '@/components/TaskMenu'
-
 import { mapGetters } from 'vuex'
+import { format } from 'date-fns'
+
 export default {
   name: 'Todo',
   components: { TaskMenu },
@@ -80,13 +81,18 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tasks: 'tasksAll'
+      tasks: 'tasksFiltered'
     })
   },
   methods: {
     doneTask (id) {
       const task = this.tasks.filter(task => task.id === id)[0]
       task.done = !task.done
+    }
+  },
+  filters: {
+    formattedDate (value) {
+      return value ? format(new Date(value), 'MM/dd/yyyy') : ''
     }
   }
 }

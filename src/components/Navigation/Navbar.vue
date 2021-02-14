@@ -20,29 +20,21 @@
 
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Vuetify Todo</v-toolbar-title>
+      <v-toolbar-title class="ml-4">Vuetify Todo</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      <Search />
     </v-app-bar>
   </div>
 </template>
 
 <script>
 import NavSideBar from './NavSideBar'
+import Search from '../Tools/Search'
+
 export default {
-  components: { NavSideBar },
+  components: { NavSideBar, Search },
   data: () => ({
     drawer: false,
     items: [
