@@ -20,7 +20,10 @@
 
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title class="ml-4">Vuetify Todo</v-toolbar-title>
+      <v-toolbar-title class="ml-4">
+        Vuetify Todo
+        <LiveDateTime />
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -32,9 +35,10 @@
 <script>
 import NavSideBar from './NavSideBar'
 import Search from '../Tools/Search'
+import LiveDateTime from '../Tools/LiveDateTime'
 
 export default {
-  components: { NavSideBar, Search },
+  components: { NavSideBar, Search, LiveDateTime },
   data: () => ({
     drawer: false,
     items: [

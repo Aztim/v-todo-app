@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import db from '@/fb'
-// import { parseISO, format } from 'date-fns'
 
 Vue.use(Vuex)
 
