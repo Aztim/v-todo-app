@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    appTitle: process.env.VUE_APP_TITLE,
     search: null,
     tasks: [
       {
@@ -99,6 +100,7 @@ export default new Vuex.Store({
 
   getters: {
     snackbar: state => state.snackbar,
+    appTitle: state => state.appTitle,
     searchValue: state => state.search,
     tasksFiltered (state) {
       if (!state.search) {

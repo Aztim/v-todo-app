@@ -1,6 +1,7 @@
 <template>
     <v-navigation-drawer
     v-model="isDrawer"
+    :mobile-breakpoint="768"
     app
     dark
     color="#31437b"

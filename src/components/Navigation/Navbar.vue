@@ -21,7 +21,7 @@
     <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title class="ml-4">
-        Vuetify Todo
+        {{ appTitle }}
         <LiveDateTime />
       </v-toolbar-title>
 
@@ -36,6 +36,7 @@
 import NavSideBar from './NavSideBar'
 import Search from '../Tools/Search'
 import LiveDateTime from '../Tools/LiveDateTime'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { NavSideBar, Search, LiveDateTime },
@@ -45,7 +46,12 @@ export default {
       { title: 'Todo', icon: 'mdi-format-list-checks', to: '/' },
       { title: 'About', icon: 'mdi-help-box', to: '/about' }
     ]
-  })
+  }),
+  computed: {
+    ...mapGetters({
+      appTitle: 'appTitle'
+    })
+  }
 }
 </script>
 
