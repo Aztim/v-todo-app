@@ -52,13 +52,20 @@
                 <v-list-item-action
                   v-if="$store.state.sorting"
                 >
-                  <v-btn
-                    color="primary"
-                    icon
-                    handle="handle"
-                  >
-                    <v-icon>mdi-drag-horizontal-variant</v-icon>
-                  </v-btn>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="primary"
+                      icon
+                      handle="handle"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-drag-horizontal-variant</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>You can drag it</span>
+                </v-tooltip>
                 </v-list-item-action>
               </template>
             </v-list-item>
