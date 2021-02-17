@@ -50,9 +50,9 @@
 </template>
 
 <script>
-import DialogDelete from './Dialog/DialogDelete'
-import DialogEdit from './Dialog/DialogEdit'
-import DialogDueDate from './Dialog/DialogDueDate'
+import DialogDelete from '../Dialog/DialogDelete'
+import DialogEdit from '../Dialog/DialogEdit'
+import DialogDueDate from '../Dialog/DialogDueDate'
 
 export default {
   components: { DialogDelete, DialogEdit, DialogDueDate },
@@ -83,6 +83,13 @@ export default {
         icon: 'mdi-delete',
         click () {
           this.dialogs.delete = true
+        }
+      },
+      {
+        title: 'Sort',
+        icon: 'mdi-drag-horizontal-variant',
+        click () {
+          this.$store.commit('toggleSorting')
         }
       }
     ]
