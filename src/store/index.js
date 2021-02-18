@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Localbase from 'localbase'
+
+const db = new Localbase('db')
 
 Vue.use(Vuex)
 
@@ -8,24 +11,24 @@ export default new Vuex.Store({
     appTitle: process.env.VUE_APP_TITLE,
     search: null,
     tasks: [
-      {
-        id: 1,
-        title: 'Wake up',
-        done: false,
-        dueDate: '2021-03-08'
-      },
-      {
-        id: 2,
-        title: 'Get bananas',
-        done: false,
-        dueDate: '2021-03-10'
-      },
-      {
-        id: 3,
-        title: 'Eat bananas',
-        done: false,
-        dueDate: '2021-03-21'
-      }
+      // {
+      //   id: 1,
+      //   title: 'Wake up',
+      //   done: false,
+      //   dueDate: '2021-03-08'
+      // },
+      // {
+      //   id: 2,
+      //   title: 'Get bananas',
+      //   done: false,
+      //   dueDate: '2021-03-10'
+      // },
+      // {
+      //   id: 3,
+      //   title: 'Eat bananas',
+      //   done: false,
+      //   dueDate: '2021-03-21'
+      // }
     ],
     snackbar: {
       show: false,
@@ -78,9 +81,11 @@ export default new Vuex.Store({
   },
 
   actions: {
-    addTask ({ commit }, newTaskTitle) {
-      commit('addTask', newTaskTitle)
-      commit('showSnackbar', 'Task added!')
+    addTask ({ commit }, newTask) {
+      db.collection('tasks').add(newTask).then(() => {
+        commit('addTask', newTask)
+        commit('showSnackbar', 'Task added!')
+      })
     },
 
     hideSnackbar ({ commit }) {

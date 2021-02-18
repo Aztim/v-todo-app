@@ -64,7 +64,7 @@
                       <v-icon>mdi-drag-horizontal-variant</v-icon>
                     </v-btn>
                   </template>
-                  <span>You can drag it</span>
+                  <span>Hold to drag it</span>
                 </v-tooltip>
                 </v-list-item-action>
               </template>
