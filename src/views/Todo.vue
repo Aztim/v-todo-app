@@ -127,7 +127,7 @@ export default {
         return this.$store.getters.tasksFiltered
       },
       set (value) {
-        this.$store.commit('setTasks', value)
+        this.$store.dispatch('setTasks', value)
       }
     }
   },
@@ -138,7 +138,7 @@ export default {
     doneTask (id) {
       // const task = this.tasks.filter(task => task.id === id)[0]
       // task.done = !task.done
-      this.$store.dispatch('doneTask')
+      this.$store.dispatch('doneTask', id)
     }
   },
   filters: {

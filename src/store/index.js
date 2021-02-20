@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import Localbase from 'localbase'
 
 const db = new Localbase('db')
+db.config.debug = false
 
 Vue.use(Vuex)
 
@@ -75,9 +76,11 @@ export default new Vuex.Store({
       const task = state.tasks.filter(task => task.id === payload.id)[0]
       task.dueDate = payload.dueDate
     },
+
     setTasks (state, tasks) {
       state.tasks = tasks
     },
+
     toggleSorting (state) {
       state.sorting = !state.sorting
     }
@@ -106,18 +109,33 @@ export default new Vuex.Store({
     },
 
     deleteTask ({ commit }, id) {
-      commit('deleteTask', id)
-      commit('showSnackbar', 'Task deleted!')
+      db.collection('tasks').doc({ id: id }).delete().then(() => {
+        commit('deleteTask', id)
+        commit('showSnackbar', 'Task deleted!')
+      })
     },
 
     updateTaskTitle ({ commit }, payload) {
-      commit('updateTaskTitle', payload)
-      commit('showSnackbar', 'Task updated!')
+      db.collection('tasks').doc({ id: payload.id }).update({
+        title: payload.title
+      }).then(() => {
+        commit('updateTaskTitle', payload)
+        commit('showSnackbar', 'Task updated!')
+      })
     },
 
     updateTaskDueDate ({ commit }, payload) {
-      commit('updateTaskDueDate', payload)
-      commit('showSnackbar', 'Due Date Updated!')
+      db.collection('tasks').doc({ id: payload.id }).update({
+        dueDate: payload.dueDate
+      }).then(() => {
+        commit('updateTaskDueDate', payload)
+        commit('showSnackbar', 'Due Date Updated!')
+      })
+    },
+
+    setTasks ({ commit }, tasks) {
+      db.collection('tasks').set(tasks)
+      commit('setTasks', tasks)
     },
 
     setSearchValue ({ commit }, payload) {
