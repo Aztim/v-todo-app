@@ -131,10 +131,14 @@ export default {
       }
     }
   },
+  mounted () {
+    this.$store.dispatch('getTasks')
+  },
   methods: {
     doneTask (id) {
-      const task = this.tasks.filter(task => task.id === id)[0]
-      task.done = !task.done
+      // const task = this.tasks.filter(task => task.id === id)[0]
+      // task.done = !task.done
+      this.$store.dispatch('doneTask')
     }
   },
   filters: {

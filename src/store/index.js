@@ -44,7 +44,10 @@ export default new Vuex.Store({
     addTask (state, newTaskTitle) {
       state.tasks.push(newTaskTitle)
     },
-
+    doneTask (state, id) {
+      const task = state.tasks.filter(task => task.id === id)[0]
+      task.done = !task.done
+    },
     showSnackbar (state, text) {
       let timeout = 0
       if (state.snackbar.show) {
@@ -82,6 +85,7 @@ export default new Vuex.Store({
 
   actions: {
     addTask ({ commit }, newTask) {
+      console.log(newTask)
       db.collection('tasks').add(newTask).then(() => {
         commit('addTask', newTask)
         commit('showSnackbar', 'Task added!')
@@ -92,20 +96,38 @@ export default new Vuex.Store({
       commit('hideSnackbar')
     },
 
+    doneTask ({ state, commit }, id) {
+      const task = state.tasks.filter(task => task.id === id)[0]
+      db.collection('tasks').doc({ id: id }).update({
+        done: !task.done
+      }).then(() => {
+        commit('doneTask', id)
+      })
+    },
+
     deleteTask ({ commit }, id) {
       commit('deleteTask', id)
       commit('showSnackbar', 'Task deleted!')
     },
+
     updateTaskTitle ({ commit }, payload) {
       commit('updateTaskTitle', payload)
       commit('showSnackbar', 'Task updated!')
     },
+
     updateTaskDueDate ({ commit }, payload) {
       commit('updateTaskDueDate', payload)
       commit('showSnackbar', 'Due Date Updated!')
     },
+
     setSearchValue ({ commit }, payload) {
       commit('setSearchValue', payload)
+    },
+
+    getTasks ({ commit }) {
+      db.collection('tasks').get().then(tasks => {
+        commit('setTasks', tasks)
+      })
     }
   },
 
