@@ -49,24 +49,9 @@
                   />
                 </v-list-item-action>
 
-                <v-list-item-action
-                  v-if="$store.state.sorting"
-                >
-                <v-tooltip right>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      color="primary"
-                      icon
-                      handle="handle"
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-drag-horizontal-variant</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Hold to drag it</span>
-                </v-tooltip>
-                </v-list-item-action>
+                <DragButton
+                  v-if="sort"
+                />
               </template>
             </v-list-item>
             <v-divider></v-divider>
@@ -88,7 +73,7 @@
     </v-container>
 
     <ButtonDoneSort
-      v-if="$store.state.sorting"
+      v-if="sort"
     />
   </div>
 </template>
@@ -96,14 +81,13 @@
 <script>
 import TaskMenu from '@/components/Todo/TaskMenu'
 import ButtonDoneSort from '@/components/Todo/ButtonDoneSorting'
-
+import DragButton from '@/components/Todo/DraggableButton'
 import draggable from 'vuedraggable'
-// import { mapGetters } from 'vuex'
 import { format } from 'date-fns'
 
 export default {
   name: 'Todo',
-  components: { TaskMenu, ButtonDoneSort, draggable },
+  components: { TaskMenu, ButtonDoneSort, draggable, DragButton },
   data () {
     return {
       // newTaskTitle: '',
@@ -112,16 +96,6 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters({
-    //   tasks: {
-    //     get () {
-    //       'tasksFiltered'
-    //     },
-    //     set (value) {
-    //       this.$store.commit('setTasks', value)
-    //     }
-    //   }
-    // })
     tasks: {
       get () {
         return this.$store.getters.tasksFiltered
@@ -129,6 +103,9 @@ export default {
       set (value) {
         this.$store.dispatch('setTasks', value)
       }
+    },
+    sort () {
+      return this.$store.getters.sorting
     }
   },
   mounted () {

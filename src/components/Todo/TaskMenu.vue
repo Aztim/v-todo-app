@@ -46,6 +46,7 @@
       @close="dialogs.delete = false"
       :task="task"
     />
+
   </div>
 </template>
 

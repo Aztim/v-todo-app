@@ -48,6 +48,9 @@ export default {
     ]
   }),
   computed: {
+    // appTitle () {
+    //   return this.$store.getters.appTitle
+    // }
     ...mapGetters({
       appTitle: 'appTitle'
     })

@@ -14,8 +14,7 @@ import Snackbar from './components/Shared/Snackbar'
 
 export default {
   components: { Navbar, Snackbar },
-  data: () => ({
-  })
+  data: () => ({})
 }
 </script>
 <style scoped>

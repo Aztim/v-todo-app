@@ -51,6 +51,7 @@ export default new Vuex.Store({
     },
     showSnackbar (state, text) {
       let timeout = 0
+
       if (state.snackbar.show) {
         state.snackbar.show = false
         timeout = 300
@@ -70,6 +71,7 @@ export default new Vuex.Store({
     },
     updateTaskTitle (state, payload) {
       const task = state.tasks.filter(task => task.id === payload.id)[0]
+      console.log(task)
       task.title = payload.title
     },
     updateTaskDueDate (state, payload) {
@@ -88,7 +90,6 @@ export default new Vuex.Store({
 
   actions: {
     addTask ({ commit }, newTask) {
-      console.log(newTask)
       db.collection('tasks').add(newTask).then(() => {
         commit('addTask', newTask)
         commit('showSnackbar', 'Task added!')
@@ -138,9 +139,9 @@ export default new Vuex.Store({
       commit('setTasks', tasks)
     },
 
-    setSearchValue ({ commit }, payload) {
-      commit('setSearchValue', payload)
-    },
+    // setSearchValue ({ commit }, payload) {
+    //   commit('setSearchValue', payload)
+    // },
 
     getTasks ({ commit }) {
       db.collection('tasks').get().then(tasks => {
@@ -160,6 +161,7 @@ export default new Vuex.Store({
       return state.tasks.filter(task =>
         task.title.toLowerCase().includes(state.search.toLowerCase())
       )
-    }
+    },
+    sorting: state => state.sorting
   }
 })

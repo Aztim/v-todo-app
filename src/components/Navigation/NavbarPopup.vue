@@ -19,13 +19,6 @@
               prepend-icon="mdi-folder"
               :rules="inputRules">
             </v-text-field>
-<!--
-            <v-textarea
-              label="Description"
-              v-model="description"
-              prepend-icon="mdi-pencil"
-              :rules="inputRules">
-            </v-textarea> -->
 
             <v-menu max-width="290px">
               <v-date-picker v-model="due"></v-date-picker>

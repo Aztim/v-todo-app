@@ -29,7 +29,9 @@ export default {
   },
   methods: {
     setSearch (e) {
-      this.$store.dispatch('setSearchValue', e)
+      // this.$store.dispatch('setSearchValue', e)
+      this.$store.commit('setSearchValue', e)
+      console.log(e)
     }
   }
 
