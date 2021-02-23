@@ -162,6 +162,7 @@ export default new Vuex.Store({
         task.title.toLowerCase().includes(state.search.toLowerCase())
       )
     },
-    sorting: state => state.sorting
+    sorting: state => state.sorting,
+    progress: state => state.progress
   }
 })

@@ -72,10 +72,15 @@ export default {
       loading: false
     }
   },
+  computed: {
+    progress () {
+      return this.$store.getters.progress
+    }
+  },
   methods: {
     addTask () {
       if (this.$refs.form.validate()) {
-        // this.loading = true
+        this.loading = true
 
         const newTaskTitle = {
           title: this.title,
@@ -84,8 +89,10 @@ export default {
           id: Date.now(),
           done: false
         }
-        this.$store.dispatch('addTask', newTaskTitle)
-        this.dialog = false
+        setTimeout(() => {
+          this.$store.dispatch('addTask', newTaskTitle)
+          this.dialog = false
+        }, 1000)
       }
     },
     clear () {
