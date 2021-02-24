@@ -91,6 +91,7 @@ export default {
         }
         setTimeout(() => {
           this.$store.dispatch('addTask', newTaskTitle)
+          this.loading = false
           this.dialog = false
         }, 1000)
       }

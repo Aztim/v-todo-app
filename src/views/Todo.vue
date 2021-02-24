@@ -36,6 +36,14 @@
                   </v-list-item-title>
                 </v-list-item-content>
 
+                <v-chip
+                  v-if="!task.done"
+                  id="v-chip"
+                  :class="`${task.status} white--text caption mr-12`"
+                  small
+                >{{task.status}}
+                </v-chip>
+
                 <v-list-item-action >
                   <v-list-item-action-text>
                     <v-icon small>mdi-calendar</v-icon>
@@ -89,18 +97,23 @@ export default {
   name: 'Todo',
   components: { TaskMenu, ButtonDoneSort, draggable, DragButton },
   data () {
-    return {
-      // newTaskTitle: '',
-      // items: ['all', 'complete', 'ongoing', 'overdue'],
-      // filter: null
-    }
+    return {}
   },
   computed: {
     tasks: {
       get () {
-        return this.$store.getters.tasksFiltered
+        // return this.$store.getters.tasksFiltered
+        const tasks = this.$store.getters.tasksFiltered
+
+        tasks.forEach((elem) => {
+          if (new Date(elem.dueDate) < new Date()) {
+            elem.status = 'overdue'
+          }
+        })
+        return tasks
       },
       set (value) {
+        console.log(value)
         this.$store.dispatch('setTasks', value)
       }
     },
@@ -125,8 +138,18 @@ export default {
 </script>
 
 <style lang="sass">
+  #v-chip.ongoing
+   background-color: #FFD700
+
+  #v-chip.overdue
+    background-color: #FF0000
+
+  #v-chip.complete
+   background-color: #1E90FF
+
   .sortable-ghost
      opacity: 0
+
   .sortable-drag
     box-shadow: 0 0 10px rgba(0,0,0,0.3)
 
