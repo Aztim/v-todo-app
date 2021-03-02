@@ -37,7 +37,6 @@
                 </v-list-item-content>
 
                 <v-chip
-                  v-if="!task.done"
                   id="v-chip"
                   :class="`${task.status} white--text caption mr-12`"
                   small
@@ -106,15 +105,12 @@ export default {
         const tasks = this.$store.getters.tasksFiltered
 
         tasks.forEach((elem) => {
-          if (new Date(elem.dueDate) < new Date()) {
-            elem.status = 'overdue'
-          }
+          if (elem.status === 'ongoing') { this.checkDate(elem) }
         })
         return tasks
       },
       set (value) {
-        console.log(value)
-        this.$store.dispatch('setTasks', value)
+        this.$store.dispatch('setTasks', value) /* ОБновляет базу при Drag&Drop */
       }
     },
     sort () {
@@ -127,6 +123,18 @@ export default {
   methods: {
     doneTask (id) {
       this.$store.dispatch('doneTask', id)
+    },
+    checkDate (elem) {
+      if (new Date(elem.dueDate) < new Date()) {
+        elem.status = 'overdue'
+
+        const payload = {
+          id: elem.id,
+          status: elem.status
+        }
+        this.$store.dispatch('updateTaskStatus', payload)
+      }
+      return elem
     }
   },
   filters: {
@@ -144,7 +152,7 @@ export default {
   #v-chip.overdue
     background-color: #FF0000
 
-  #v-chip.complete
+  #v-chip.completed
    background-color: #1E90FF
 
   .sortable-ghost

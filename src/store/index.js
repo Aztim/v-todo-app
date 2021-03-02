@@ -48,6 +48,7 @@ export default new Vuex.Store({
     doneTask (state, id) {
       const task = state.tasks.filter(task => task.id === id)[0]
       task.done = !task.done
+      task.status = (task.done) ? 'completed' : 'ongoing'
     },
     showSnackbar (state, text) {
       let timeout = 0
@@ -103,7 +104,8 @@ export default new Vuex.Store({
     doneTask ({ state, commit }, id) {
       const task = state.tasks.filter(task => task.id === id)[0]
       db.collection('tasks').doc({ id: id }).update({
-        done: !task.done
+        done: !task.done,
+        status: (!task.done) ? 'completed' : 'ongoing'
       }).then(() => {
         commit('doneTask', id)
       })
@@ -134,7 +136,14 @@ export default new Vuex.Store({
       })
     },
 
+    updateTaskStatus ({ commit }, payload) {
+      db.collection('tasks').doc({ id: payload.id }).update({
+        status: payload.status
+      })
+    },
+
     setTasks ({ commit }, tasks) {
+      console.log(tasks)
       db.collection('tasks').set(tasks)
       commit('setTasks', tasks)
     },
