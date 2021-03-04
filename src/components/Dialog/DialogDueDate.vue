@@ -41,10 +41,18 @@ export default {
     saveTask () {
       const payload = {
         id: this.task.id,
-        dueDate: this.date
+        dueDate: this.date,
+        status: this.checkStatus(this.task.status)
       }
       this.$store.dispatch('updateTaskDueDate', payload)
       this.$emit('close')
+    },
+    checkStatus (status) {
+      if (status === 'completed') {
+        return status
+      } else {
+        return new Date(this.date) < new Date() ? 'overdue' : 'ongoing'
+      }
     }
   },
   mounted () {

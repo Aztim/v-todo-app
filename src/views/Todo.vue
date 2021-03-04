@@ -105,8 +105,11 @@ export default {
         const tasks = this.$store.getters.tasksFiltered
 
         tasks.forEach((elem) => {
-          if (elem.status === 'ongoing') { this.checkDate(elem) }
+          if (elem.status === 'ongoing' && new Date(elem.dueDate) < new Date()) { this.checkDate(elem) }
         })
+        // tasks.filter(function (task) {
+        //   if (task.status === 'ongoing' && new Date(task.dueDate) < new Date()[0]) { return this.checkDate(task) }
+        // })
         return tasks
       },
       set (value) {
@@ -124,17 +127,16 @@ export default {
     doneTask (id) {
       this.$store.dispatch('doneTask', id)
     },
-    checkDate (elem) {
-      if (new Date(elem.dueDate) < new Date()) {
-        elem.status = 'overdue'
+    checkDate (task) {
+      task.status = 'overdue'
 
-        const payload = {
-          id: elem.id,
-          status: elem.status
-        }
-        this.$store.dispatch('updateTaskStatus', payload)
+      const payload = {
+        id: task.id,
+        status: task.status
       }
-      return elem
+      this.$store.dispatch('updateTaskStatus', payload)
+
+      return task
     }
   },
   filters: {

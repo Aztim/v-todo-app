@@ -72,12 +72,12 @@ export default new Vuex.Store({
     },
     updateTaskTitle (state, payload) {
       const task = state.tasks.filter(task => task.id === payload.id)[0]
-      console.log(task)
       task.title = payload.title
     },
     updateTaskDueDate (state, payload) {
       const task = state.tasks.filter(task => task.id === payload.id)[0]
       task.dueDate = payload.dueDate
+      task.status = payload.status
     },
 
     setTasks (state, tasks) {
@@ -129,7 +129,8 @@ export default new Vuex.Store({
 
     updateTaskDueDate ({ commit }, payload) {
       db.collection('tasks').doc({ id: payload.id }).update({
-        dueDate: payload.dueDate
+        dueDate: payload.dueDate,
+        status: payload.status
       }).then(() => {
         commit('updateTaskDueDate', payload)
         commit('showSnackbar', 'Due Date Updated!')
@@ -143,7 +144,7 @@ export default new Vuex.Store({
     },
 
     setTasks ({ commit }, tasks) {
-      console.log(tasks)
+      // console.log(tasks)
       db.collection('tasks').set(tasks)
       commit('setTasks', tasks)
     },
