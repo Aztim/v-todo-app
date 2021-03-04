@@ -38,7 +38,7 @@
 
                 <v-chip
                   id="v-chip"
-                  :class="`${task.status} white--text caption mr-12`"
+                  :class="`${checkDate(task)} white--text caption mr-12`"
                   small
                 >{{task.status}}
                 </v-chip>
@@ -96,20 +96,14 @@ export default {
   name: 'Todo',
   components: { TaskMenu, ButtonDoneSort, draggable, DragButton },
   data () {
-    return {}
+    return {
+    }
   },
   computed: {
     tasks: {
       get () {
         // return this.$store.getters.tasksFiltered
         const tasks = this.$store.getters.tasksFiltered
-
-        tasks.forEach((elem) => {
-          if (elem.status === 'ongoing' && new Date(elem.dueDate) < new Date()) { this.checkDate(elem) }
-        })
-        // tasks.filter(function (task) {
-        //   if (task.status === 'ongoing' && new Date(task.dueDate) < new Date()[0]) { return this.checkDate(task) }
-        // })
         return tasks
       },
       set (value) {
@@ -128,15 +122,16 @@ export default {
       this.$store.dispatch('doneTask', id)
     },
     checkDate (task) {
-      task.status = 'overdue'
-
+      if (task.status === 'ongoing' && new Date(task.dueDate) < new Date()) {
+        task.status = 'overdue'
+      }
       const payload = {
         id: task.id,
         status: task.status
       }
       this.$store.dispatch('updateTaskStatus', payload)
 
-      return task
+      return task.status
     }
   },
   filters: {
