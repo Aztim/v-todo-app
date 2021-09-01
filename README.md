@@ -11,10 +11,10 @@
 Used technologies | Description |
 :---|:-------------:
 [Vue js](https://ru.vuejs.org) | The Progressive JavaScript Framework
-[Vue-Slider](https://nightcatsama.github.io/vue-slider-component/#/) | A highly customized slider component
+[Firebase](https://firebase.google.com/) | Firebase is a mobile and web application development platform
 [Localbase](https://github.com/dannyconnell/localbase) | A Firebase-Style Database ... Offline!
-[Font Awesome](https://fontawesome.com/) | The internet's most popular icon toolkit
-[Lodash](https://lodash.com/) | A modern JavaScript utility library delivering modularity, performance & extras
+[Vuedraggable](https://www.npmjs.com/package/vuedraggable) | Vue component (Vue.js 2.0) or directive (Vue.js 1.0) allowing drag-and-drop and synchronization with view model array.
+[Vuetify](https://vuetifyjs.com/en/) | A modern JavaScript utility library delivering modularity, performance & extras
 
 
 ## Project setup
